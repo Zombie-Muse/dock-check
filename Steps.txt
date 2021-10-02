@@ -1,0 +1,6 @@
+Should be called things to do, but whatever.
+
+components
+-dock layout
+--door and trailer number
+---after click, take user to screen that allows move, swap, empty
