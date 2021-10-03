@@ -1,12 +1,15 @@
 import React from "react";
-import DoorDetail from "./DoorDetail";
+import { Link } from "react-router-dom";
 
 export default function DockLayout() {
   return (
     <div>
-      <h1>Dock Layout</h1>
+      <h1>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          Dock Layout
+        </Link>
+      </h1>
       <p>Here is the dock layout</p>
-      <DoorDetail />
     </div>
   );
 }
