@@ -7,26 +7,23 @@ const DoorDetail = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [doorInfo, setDoorInfo] = useState([]);
-  const doors = db.collection("doors");
-  const info = doors.where("doorNumber", "==", { id }).get();
 
   const fetchTrailerInfo = () => {
     setLoading(true);
-    console.log({ id });
-    console.log(info.trailerNumber);
-
-    // doors;
-    db.collection("doors")
-      .where("doorNumber", "==", { id })
-      .get()
-      .then((querySnapshot) => {
+    const details = [];
+    const subscriber = db
+      .collection("doors")
+      .where("trailerNumber", "==", { id })
+      .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          console.log(doc.id, " => ", doc.data());
-          // var data = doc.data();
-          // setDoorInfo((arr) => [...arr, data]);
+          details.push({ ...doc.data(), key: doc.doorNumber });
         });
       });
+    setDoorInfo(details);
     setLoading(false);
+    console.log(details);
+    console.log({ id });
+    return () => subscriber();
   };
 
   useEffect(() => {
@@ -45,12 +42,16 @@ const DoorDetail = () => {
 
   return (
     <div>
-      <h2>Door - {id}</h2>
-      <h3>
-        {doorInfo.prefix}
-        {doorInfo.trailerNumber}
-      </h3>
-      <p>Empty: {doorInfo.isEmpty}</p>
+      <h1>Door - {id}</h1>
+      {doorInfo &&
+        doorInfo.map((info) => {
+          return (
+            <div key={doorInfo.key}>
+              <h2 key={doorInfo.key}>{doorInfo.prefix}</h2>
+              <p key={doorInfo.key}>{doorInfo.trailerNumber}</p>
+            </div>
+          );
+        })}
     </div>
   );
 };
