@@ -3,7 +3,7 @@ import { Navbar, Container, Nav } from "react-bootstrap";
 const NavbarBottom = () => {
   return (
     <Navbar bg="light" fixed="bottom">
-      <Container className="">
+      <Container>
         <Nav className="me-auto my-4 justify-content-center">
           <Nav.Item>
             <Nav.Link href="/dock-layout">Dock Layout</Nav.Link>

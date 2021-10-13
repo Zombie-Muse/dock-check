@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import db from "./firebase.config";
-import { ListGroup, Spinner } from "react-bootstrap";
-import FormCheckInput from "react-bootstrap/esm/FormCheckInput";
-import FormCheckLabel from "react-bootstrap/esm/FormCheckLabel";
+import { Spinner } from "react-bootstrap";
+import DoorDetail from "./DoorDetail";
 
 const DockLayout = () => {
   const [doors, setDoors] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchDoors = () => {
+  const fetchDoors = async () => {
     setLoading(true);
-    db.collection("doors")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((item) => {
-          var data = item.data();
-          setDoors((arr) => [...arr, data]);
-        });
+    return db
+      .collection("doors")
+      .orderBy("doorNumber")
+      .onSnapshot((snapshot) => {
+        const doorInfo = [];
+        snapshot.forEach((doc) => doorInfo.push({ ...doc.data(), id: doc.id }));
+        setDoors(doorInfo);
         setLoading(false);
       });
+    // const data = await db.collection("doors").orderBy("doorNumber").get();
+    // setDoors(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
   useEffect(() => {
@@ -37,43 +37,20 @@ const DockLayout = () => {
   }
 
   return (
-    <ListGroup>
-      {doors &&
-        doors.map((door) => {
-          return (
-            <div className="border border-dark" key={door.doorNumber}>
-              <Link
-                to={`/door-detail/${door.doorNumber}`}
-                className="d-inline-block"
-              >
-                <div className="d-inline-block px-4 py-3">
-                  {door.doorNumber}
-                </div>
-                <div className="d-inline-block px-4 py-3">
-                  {door.prefix}
-                  {door.trailerNumber}
-                </div>
-              </Link>
-              <div className="d-inline-block float-end px-4 py-3">
-                <FormCheckInput />
-                <FormCheckLabel>Empty</FormCheckLabel>
-              </div>
-              <br />
-            </div>
-            // <ListGroupItem key={door.doorNumber} className="d-inline-block">
-            //   <div className="d-inline-block px-4">{door.doorNumber}</div>
-            //   <div className="d-inline-block px-4">
-            //     {door.prefix}
-            //     {door.trailerNumber}
-            //   </div>
-            //   <div className="d-inline-block float-end">
-            //     <FormCheckInput />
-            //     <FormCheckLabel>Empty</FormCheckLabel>
-            //   </div>
-            // </ListGroupItem>
-          );
-        })}
-    </ListGroup>
+    <div>
+      <ul>
+        {doors.map((door) => (
+          <li key={door.id}>
+            <DoorDetail door={door} />
+          </li>
+        ))}
+      </ul>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+    </div>
   );
 };
 

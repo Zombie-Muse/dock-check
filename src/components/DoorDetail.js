@@ -1,58 +1,91 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import db from "./firebase.config";
-import { Spinner } from "react-bootstrap";
-import { useParams } from "react-router";
 
-const DoorDetail = () => {
-  const { id } = useParams();
+const DoorDetail = ({ door }) => {
+  const doorNumber = door.doorNumber;
+  const [empty, setEmpty] = useState(door.isEmpty);
+  const [breakout, setBreakout] = useState(door.isBreakout);
+  const [prefix, setPrefix] = useState(door.prefix);
+  const [trailer, setTrailer] = useState(door.trailerNumber);
   const [loading, setLoading] = useState(false);
-  const [doorInfo, setDoorInfo] = useState([]);
 
-  const fetchTrailerInfo = () => {
-    setLoading(true);
-    const details = [];
-    const subscriber = db
-      .collection("doors")
-      .where("trailerNumber", "==", { id })
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          details.push({ ...doc.data(), key: doc.doorNumber });
-        });
-      });
-    setDoorInfo(details);
-    setLoading(false);
-    console.log(details);
-    console.log({ id });
-    return () => subscriber();
+  const onUpdate = () => {
+    db.collection("doors").doc(door.id).update({
+      doorNumber: doorNumber,
+      prefix: prefix,
+      trailerNumber: trailer,
+      isEmpty: empty,
+      isBreakout: breakout,
+    });
+    setPrefix(prefix);
+    setTrailer(trailer);
+    setEmpty(empty);
+    setBreakout(breakout);
   };
 
-  useEffect(() => {
-    fetchTrailerInfo();
-  }, []);
+  const clearDoors = () => {
+    db.collection("doors").doc(door.id).update({
+      doorNumber: doorNumber,
+      prefix: "",
+      trailerNumber: "",
+      isEmpty: false,
+      isBreakout: false,
+    });
+    setPrefix("");
+    setTrailer("");
+    setEmpty(false);
+    setBreakout(false);
+  };
 
-  if (loading) {
-    return (
-      <div className="text-center">
-        <Spinner animation="border" role="status" variant="success" size="lg">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      </div>
-    );
-  }
-
+  //TODO: Make the output look pretty
   return (
-    <div>
-      <h1>Door - {id}</h1>
-      {doorInfo &&
-        doorInfo.map((info) => {
-          return (
-            <div key={doorInfo.key}>
-              <h2 key={doorInfo.key}>{doorInfo.prefix}</h2>
-              <p key={doorInfo.key}>{doorInfo.trailerNumber}</p>
-            </div>
-          );
-        })}
-    </div>
+    <>
+      <div key={door.id}>{doorNumber}</div>
+
+      <select
+        id="prefix"
+        value={prefix}
+        onChange={(e) => {
+          setPrefix(e.target.value);
+        }}
+      >
+        <option value="-"></option>
+        <option value="LE">LE</option>
+        <option value="OA">OA</option>
+        <option value="OE">OE</option>
+        <option value="OF">OF</option>
+        <option value="SF">SF</option>
+        <option value="RL">RL</option>
+      </select>
+      <input
+        id="trailer"
+        value={trailer}
+        onChange={(e) => {
+          setTrailer(e.target.value);
+        }}
+      />
+      <input
+        id="empty"
+        type="checkbox"
+        checked={empty}
+        onChange={(e) => {
+          setEmpty(!empty);
+        }}
+      />
+      <label htmlFor="empty">Empty</label>
+      <input
+        id="breakout"
+        type="checkbox"
+        checked={breakout}
+        onChange={(e) => {
+          setBreakout(!breakout);
+        }}
+      />
+      <label htmlFor="breakout">B/O</label>
+
+      <button onClick={onUpdate}>Update</button>
+      <button onClick={clearDoors}>Clear</button>
+    </>
   );
 };
 
