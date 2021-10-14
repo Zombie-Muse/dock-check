@@ -14,9 +14,9 @@ const NavbarBottom = () => {
           <Nav.Item>
             <Nav.Link href="/notes">Notes</Nav.Link>
           </Nav.Item>
-          <Nav.Item>
+          {/* <Nav.Item>
             <Nav.Link href="/add">Add Door</Nav.Link>
-          </Nav.Item>
+          </Nav.Item> */}
         </Nav>
       </Container>
     </Navbar>

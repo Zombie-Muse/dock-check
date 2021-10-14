@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import db from "./firebase.config";
-import { Spinner } from "react-bootstrap";
+import { ListGroup, Spinner, Container } from "react-bootstrap";
 import DoorDetail from "./DoorDetail";
 
 const DockLayout = () => {
@@ -38,13 +38,15 @@ const DockLayout = () => {
 
   return (
     <div>
-      <ul>
-        {doors.map((door) => (
-          <li key={door.id}>
-            <DoorDetail door={door} />
-          </li>
-        ))}
-      </ul>
+      <Container>
+        <ListGroup>
+          {doors.map((door) => (
+            <ListGroup.Item key={door.id}>
+              <DoorDetail door={door} />
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      </Container>
       <br />
       <br />
       <br />

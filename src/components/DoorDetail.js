@@ -1,5 +1,14 @@
 import React, { useState } from "react";
 import db from "./firebase.config";
+import {
+  Button,
+  CloseButton,
+  Form,
+  Row,
+  Col,
+  Stack,
+  Toast,
+} from "react-bootstrap";
 
 const DoorDetail = ({ door }) => {
   const doorNumber = door.doorNumber;
@@ -7,7 +16,20 @@ const DoorDetail = ({ door }) => {
   const [breakout, setBreakout] = useState(door.isBreakout);
   const [prefix, setPrefix] = useState(door.prefix);
   const [trailer, setTrailer] = useState(door.trailerNumber);
-  const [loading, setLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
+  const prefixOptions = [
+    { value: "LE", label: "LE" },
+    { value: "OA", label: "OA" },
+    { value: "OE", label: "OE" },
+    { value: "OF", label: "OF" },
+    { value: "SF", label: "SF" },
+    { value: "RL", label: "RL" },
+  ];
+
+  const onShowToast = () => {
+    setShowToast(true);
+  };
 
   const onUpdate = () => {
     db.collection("doors").doc(door.id).update({
@@ -21,6 +43,7 @@ const DoorDetail = ({ door }) => {
     setTrailer(trailer);
     setEmpty(empty);
     setBreakout(breakout);
+    onShowToast();
   };
 
   const clearDoors = () => {
@@ -40,51 +63,89 @@ const DoorDetail = ({ door }) => {
   //TODO: Make the output look pretty
   return (
     <>
-      <div key={door.id}>{doorNumber}</div>
-
-      <select
-        id="prefix"
-        value={prefix}
-        onChange={(e) => {
-          setPrefix(e.target.value);
-        }}
-      >
-        <option value="-"></option>
-        <option value="LE">LE</option>
-        <option value="OA">OA</option>
-        <option value="OE">OE</option>
-        <option value="OF">OF</option>
-        <option value="SF">SF</option>
-        <option value="RL">RL</option>
-      </select>
-      <input
-        id="trailer"
-        value={trailer}
-        onChange={(e) => {
-          setTrailer(e.target.value);
-        }}
-      />
-      <input
-        id="empty"
-        type="checkbox"
-        checked={empty}
-        onChange={(e) => {
-          setEmpty(!empty);
-        }}
-      />
-      <label htmlFor="empty">Empty</label>
-      <input
-        id="breakout"
-        type="checkbox"
-        checked={breakout}
-        onChange={(e) => {
-          setBreakout(!breakout);
-        }}
-      />
-      <label htmlFor="breakout">B/O</label>
-
-      <button onClick={onUpdate}>Update</button>
-      <button onClick={clearDoors}>Clear</button>
+      <Stack gap={4}>
+        <Row>
+          <Col xs={1}>
+            <div key={door.id}>
+              <h2>{doorNumber}</h2>
+            </div>
+          </Col>
+          <Col xs={2}>
+            <select
+              id="prefix"
+              defaultValue={prefix}
+              onChange={(e) => {
+                setPrefix(e.target.value);
+              }}
+            >
+              <option value="-"></option>
+              <option value="LE">LE</option>
+              <option value="OA">OA</option>
+              <option value="OE">OE</option>
+              <option value="OF">OF</option>
+              <option value="SF">SF</option>
+              <option value="RL">RL</option>
+              {prefix}
+            </select>
+          </Col>
+          <Col xs={8}>
+            <Form.Control
+              type="text"
+              id="trailer"
+              value={trailer}
+              onChange={(e) => {
+                setTrailer(e.target.value);
+              }}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col xs>
+            <Form.Check
+              inline
+              id="empty"
+              type="checkbox"
+              checked={empty}
+              onChange={(e) => {
+                setEmpty(!empty);
+              }}
+            />
+            <Form.Label htmlFor="empty">Empty</Form.Label>
+          </Col>
+          <Col xs>
+            <Form.Check
+              inline
+              id="breakout"
+              type="checkbox"
+              checked={breakout}
+              onChange={(e) => {
+                setBreakout(!breakout);
+              }}
+            />
+            <Form.Label htmlFor="breakout">B/O</Form.Label>
+          </Col>
+          <Col xs>
+            <Button variant="outline-success" size="sm" onClick={onUpdate}>
+              Update
+            </Button>
+          </Col>
+          <Col xs>
+            <div>
+              <Toast
+                onClose={() => setShowToast(false)}
+                show={showToast}
+                delay={3000}
+                autohide
+              >
+                <Toast.Header>Updated!</Toast.Header>
+              </Toast>
+            </div>
+          </Col>
+          <Col xs>
+            <CloseButton size="sm" onClick={clearDoors} />
+          </Col>
+        </Row>
+      </Stack>
     </>
   );
 };
