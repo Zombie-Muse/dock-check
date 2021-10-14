@@ -6,7 +6,7 @@ const NavbarBottom = () => {
       <Container>
         <Nav className="me-auto my-4 justify-content-center">
           <Nav.Item>
-            <Nav.Link href="/dock-layout">Dock Layout</Nav.Link>
+            <Nav.Link href="/">Dock Layout</Nav.Link>
           </Nav.Item>
           <Nav.Item>
             <Nav.Link href="/history">Door History</Nav.Link>

@@ -15,7 +15,7 @@ function App() {
         <div className="App">
           <h1 className="">LAX Dock Layout</h1>
           <Switch>
-            <Route exact path="/dock-layout" component={DockLayout} />
+            <Route exact path="/" component={DockLayout} />
             <Route path="/door-detail/:id" exact component={DoorDetail} />
             <Route path="/history" exact component={DoorHistory} />
             <Route path="/notes" exact component={Notes} />
