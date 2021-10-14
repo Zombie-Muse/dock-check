@@ -18,14 +18,14 @@ const DoorDetail = ({ door }) => {
   const [trailer, setTrailer] = useState(door.trailerNumber);
   const [showToast, setShowToast] = useState(false);
 
-  const prefixOptions = [
-    { value: "LE", label: "LE" },
-    { value: "OA", label: "OA" },
-    { value: "OE", label: "OE" },
-    { value: "OF", label: "OF" },
-    { value: "SF", label: "SF" },
-    { value: "RL", label: "RL" },
-  ];
+  // const prefixOptions = [
+  //   { value: "LE", label: "LE" },
+  //   { value: "OA", label: "OA" },
+  //   { value: "OE", label: "OE" },
+  //   { value: "OF", label: "OF" },
+  //   { value: "SF", label: "SF" },
+  //   { value: "RL", label: "RL" },
+  // ];
 
   const onShowToast = () => {
     setShowToast(true);
