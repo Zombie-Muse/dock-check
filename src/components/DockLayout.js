@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import db from "./firebase.config";
 import { ListGroup, Spinner, Container } from "react-bootstrap";
-import DoorDetail from "./DoorDetail";
+import { DoorDetail } from "./DoorDetail";
 
 const DockLayout = () => {
   const [doors, setDoors] = useState([]);
