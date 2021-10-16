@@ -9,6 +9,8 @@ import {
   Stack,
   Toast,
 } from "react-bootstrap";
+import { BsLockFill, BsUnlockFill } from "react-icons/bs"
+import { IconContext } from "react-icons";
 
 export const DoorDetail = ({ door }) => {
   const doorNumber = door.doorNumber;
@@ -18,6 +20,7 @@ export const DoorDetail = ({ door }) => {
   const [trailer, setTrailer] = useState(door.trailerNumber);
   const [showToast, setShowToast] = useState(false);
   const [deleteToast, setDeleteToast] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
 
   // const prefixOptions = [
   //   { value: "LE", label: "LE" },
@@ -37,7 +40,7 @@ export const DoorDetail = ({ door }) => {
       isBreakout: breakout,
     });
     setPrefix(prefix);
-    setTrailer(trailer);
+    setTrailer(trailer.toUpperCase());
     setEmpty(empty);
     setBreakout(breakout);
     setShowToast(true);
@@ -57,6 +60,10 @@ export const DoorDetail = ({ door }) => {
     setBreakout(false);
     setDeleteToast(true);
   };
+
+  const handleLock = () => {
+    setIsLocked(!isLocked)
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -147,6 +154,15 @@ export const DoorDetail = ({ door }) => {
             </Col>
             <Col xs>
               <CloseButton size="sm" onClick={clearDoors} />
+            </Col>
+            <Col xs>
+              
+                <div>
+                  {isLocked ? <BsLockFill onClick={handleLock}/> : <BsUnlockFill onClick={handleLock}/>}
+                  
+                 </div>
+              
+              
             </Col>
             {/* <Col xs>
               <div>
