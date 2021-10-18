@@ -1,30 +1,45 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import "./App.css";
+import PrivateRoute from "./components/PrivateRoute";
+// import "./App.css";
 import DockLayout from "./components/DockLayout";
 import DoorDetail from "./components/DoorDetail";
 import DoorHistory from "./components/DoorHistory";
-import NavbarBottom from "./components/NavbarBottom";
-// import AddDoor from "./components/AddDoor";
 import Notes from "./components/Notes";
-
+import NavbarBottom from "./components/NavbarBottom";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
+import Profile from "./components/Profile";
+import ForgotPassword from "./components/ForgotPassword";
+import { AuthProvider } from "./context/AuthContext";
+// import AddDoor from "./components/AddDoor";
 function App() {
   return (
-    <Router>
-      <Container>
-        <div className="App">
-          <h1 className="">LAX Dock Layout</h1>
-          <Switch>
-            <Route exact path="/" component={DockLayout} />
-            <Route path="/door-detail/:id" exact component={DoorDetail} />
-            <Route path="/history" exact component={DoorHistory} />
-            <Route path="/notes" exact component={Notes} />
-            {/* <Route path="/add" exact component={AddDoor} /> */}
-          </Switch>
-          <NavbarBottom />
-        </div>
-      </Container>
-    </Router>
+    <div className="App">
+      <Router>
+        <AuthProvider>
+          <Container>
+            <Switch>
+              <PrivateRoute exact path="/" component={DockLayout} />
+              <PrivateRoute
+                path="/door-detail/:id"
+                exact
+                component={DoorDetail}
+              />
+              <PrivateRoute path="/history" exact component={DoorHistory} />
+              <Route path="/notes" exact component={Notes} />
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/forgot-password" component={ForgotPassword} />
+              <Route path="/profile" component={Profile} />
+
+              {/* <Route path="/add" exact component={AddDoor} /> */}
+            </Switch>
+            <NavbarBottom />
+          </Container>
+        </AuthProvider>
+      </Router>
+    </div>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import db from "./firebase.config";
 import {
   Button,
@@ -9,27 +9,25 @@ import {
   Stack,
   Toast,
 } from "react-bootstrap";
-import { BsLockFill, BsUnlockFill } from "react-icons/bs"
-import { IconContext } from "react-icons";
+import { BsLockFill, BsUnlockFill } from "react-icons/bs";
 
 export const DoorDetail = ({ door }) => {
   const doorNumber = door.doorNumber;
   const [empty, setEmpty] = useState(door.isEmpty);
   const [breakout, setBreakout] = useState(door.isBreakout);
   const [prefix, setPrefix] = useState(door.prefix);
-  const [trailer, setTrailer] = useState(door.trailerNumber);
+  const [trailer, setTrailer] = useState(door.trailerNumber.toUpperCase());
   const [showToast, setShowToast] = useState(false);
-  const [deleteToast, setDeleteToast] = useState(false);
+  // const [deleteToast, setDeleteToast] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
 
-  // const prefixOptions = [
-  //   { value: "LE", label: "LE" },
-  //   { value: "OA", label: "OA" },
-  //   { value: "OE", label: "OE" },
-  //   { value: "OF", label: "OF" },
-  //   { value: "SF", label: "SF" },
-  //   { value: "RL", label: "RL" },
-  // ];
+  useEffect(() => {
+    setIsLocked(JSON.parse(window.localStorage.getItem("isLocked")));
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("isLocked", isLocked);
+  }, [isLocked]);
 
   const onUpdate = () => {
     db.collection("doors").doc(door.id).update({
@@ -40,7 +38,7 @@ export const DoorDetail = ({ door }) => {
       isBreakout: breakout,
     });
     setPrefix(prefix);
-    setTrailer(trailer.toUpperCase());
+    setTrailer(trailer);
     setEmpty(empty);
     setBreakout(breakout);
     setShowToast(true);
@@ -58,22 +56,18 @@ export const DoorDetail = ({ door }) => {
     setTrailer("");
     setEmpty(false);
     setBreakout(false);
-    setDeleteToast(true);
+    // setDeleteToast(true);
   };
 
-  const handleLock = () => {
-    setIsLocked(!isLocked)
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  // };
 
   //TODO: Make the output look pretty...This is more difficult than it seems. Don't judge me.
   return (
     <>
       <Stack gap={4}>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={(e) => e.preventDefault()} disabled={isLocked}>
           <Row>
             <Col xs={2}>
               <div key={door.id}>
@@ -81,29 +75,30 @@ export const DoorDetail = ({ door }) => {
               </div>
             </Col>
 
-            <Col xs={2}>
+            <Col xs={4}>
               <select
                 id="prefix"
                 defaultValue={prefix}
+                disabled={isLocked}
                 onChange={(e) => {
                   setPrefix(e.target.value);
                 }}
               >
                 <option value="-"></option>
-                <option value="LE">LE</option>
-                <option value="OA">OA</option>
-                <option value="OE">OE</option>
-                <option value="OF">OF</option>
-                <option value="SF">SF</option>
-                <option value="RL">RL</option>
+                <option value="Pup">Pup</option>
+                <option value="Liftgate">Liftgate</option>
+                <option value="R+L Equipment">R+L Equipment</option>
+                <option value="Container">Container</option>
+                <option value="Purchase">Purchase</option>
                 {prefix}
               </select>
             </Col>
-            <Col xs={8}>
+            <Col xs={6}>
               <Form.Control
                 type="text"
                 id="trailer"
                 value={trailer}
+                disabled={isLocked}
                 onChange={(e) => {
                   setTrailer(e.target.value);
                 }}
@@ -117,6 +112,7 @@ export const DoorDetail = ({ door }) => {
                 id="empty"
                 type="checkbox"
                 checked={empty}
+                disabled={isLocked}
                 onChange={(e) => {
                   setEmpty(!empty);
                 }}
@@ -129,6 +125,7 @@ export const DoorDetail = ({ door }) => {
                 id="breakout"
                 type="checkbox"
                 checked={breakout}
+                disabled={isLocked}
                 onChange={(e) => {
                   setBreakout(!breakout);
                 }}
@@ -136,7 +133,12 @@ export const DoorDetail = ({ door }) => {
               <Form.Label htmlFor="breakout">B/O</Form.Label>
             </Col>
             <Col xs>
-              <Button variant="outline-success" size="sm" onClick={onUpdate}>
+              <Button
+                variant="success"
+                size="sm"
+                onClick={onUpdate}
+                disabled={isLocked}
+              >
                 Update
               </Button>
             </Col>
@@ -153,16 +155,16 @@ export const DoorDetail = ({ door }) => {
               </div>
             </Col>
             <Col xs>
-              <CloseButton size="sm" onClick={clearDoors} />
+              <CloseButton size="sm" onClick={clearDoors} disabled={isLocked} />
             </Col>
             <Col xs>
-              
-                <div>
-                  {isLocked ? <BsLockFill onClick={handleLock}/> : <BsUnlockFill onClick={handleLock}/>}
-                  
-                 </div>
-              
-              
+              <div className="justify-end">
+                {isLocked ? (
+                  <BsLockFill onClick={() => setIsLocked(!isLocked)} />
+                ) : (
+                  <BsUnlockFill onClick={() => setIsLocked(!isLocked)} />
+                )}
+              </div>
             </Col>
             {/* <Col xs>
               <div>
