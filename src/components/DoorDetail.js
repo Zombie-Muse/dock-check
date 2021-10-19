@@ -8,6 +8,7 @@ import {
   Col,
   Stack,
   Toast,
+  Modal,
 } from "react-bootstrap";
 import { BsLockFill, BsUnlockFill } from "react-icons/bs";
 
@@ -20,6 +21,7 @@ export const DoorDetail = ({ door }) => {
   const [showToast, setShowToast] = useState(false);
   // const [deleteToast, setDeleteToast] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     setIsLocked(JSON.parse(window.localStorage.getItem("isLocked")));

@@ -3,7 +3,8 @@ import { Container } from "react-bootstrap";
 import PrivateRoute from "./components/PrivateRoute";
 // import "./App.css";
 import DockLayout from "./components/DockLayout";
-import DoorDetail from "./components/DoorDetail";
+// import DoorDetail from "./components/DoorDetail";
+import DoorDetail2 from "./components/DoorDetail2";
 import DoorHistory from "./components/DoorHistory";
 import Notes from "./components/Notes";
 import NavbarBottom from "./components/NavbarBottom";
@@ -24,7 +25,7 @@ function App() {
               <PrivateRoute
                 path="/door-detail/:id"
                 exact
-                component={DoorDetail}
+                component={DoorDetail2}
               />
               <PrivateRoute path="/history" exact component={DoorHistory} />
               <Route path="/notes" exact component={Notes} />

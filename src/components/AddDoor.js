@@ -8,6 +8,7 @@ const AddDoor = () => {
   const [newTrailerNumber, setNewTrailerNumber] = useState("");
   const [newEmpty, setNewEmpty] = useState(false);
   const [newBreakout, setNewBreakout] = useState(false);
+  const [newArrive, setNewArrive] = useState("");
 
   const onCreate = () => {
     const newDocRef = db.collection("doors").doc();
@@ -19,6 +20,7 @@ const AddDoor = () => {
       trailerNumber: newTrailerNumber,
       isEmpty: newEmpty,
       isBreakout: newBreakout,
+      isArrive: newArrive,
     });
     console.log(newDoorNumber + " " + newTrailerNumber);
   };
