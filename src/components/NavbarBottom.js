@@ -29,7 +29,7 @@ const NavbarBottom = () => {
               <Nav.Link href="/history">Door History</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link href="/notes">Notes</Nav.Link>
+              <Nav.Link href="/notes">App Updates</Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link href="/" onClick={handleLogout}>
@@ -51,7 +51,7 @@ const NavbarBottom = () => {
               <Nav.Link href="/login">Login</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link href="/notes">Notes</Nav.Link>
+              <Nav.Link href="/notes">App Updates</Nav.Link>
             </Nav.Item>
           </Nav>
         )}

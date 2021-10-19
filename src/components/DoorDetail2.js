@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import DoorStatus from "./DoorStatus";
 import db from "./firebase.config";
 import {
   Button,
@@ -44,7 +45,6 @@ export const DoorDetail2 = ({ door }) => {
       notes: notes,
       status: status,
     });
-
     setPrefix(prefix);
     setTrailer(trailer);
     setEmpty(empty);
@@ -57,7 +57,8 @@ export const DoorDetail2 = ({ door }) => {
       setStatus("Breakout");
     } else if (arrive) {
       setStatus("Arrive");
-    }
+    } else setStatus("");
+
     setShowToast(true);
   };
 
@@ -81,6 +82,12 @@ export const DoorDetail2 = ({ door }) => {
     setStatus("");
 
     // setDeleteToast(true);
+  };
+
+  const handleStatus = () => {
+    if (status == "Empty") {
+      return <div style={{ background: "red" }}>{status}</div>;
+    }
   };
 
   //TODO: Make the output look pretty...This is more difficult than it seems. Don't judge me.
@@ -115,7 +122,7 @@ export const DoorDetail2 = ({ door }) => {
         </Row>
         <Row>
           <Col>
-            <div className="m-4">
+            <div key={door.id} className="m-4">
               <p>{status}</p>
             </div>
           </Col>
