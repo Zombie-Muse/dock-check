@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import DoorStatus from "./DoorStatus";
 import db from "./firebase.config";
 import {
   Button,
@@ -9,6 +8,7 @@ import {
   Modal,
   InputGroup,
   FloatingLabel,
+  Toast,
 } from "react-bootstrap";
 
 export const DoorDetail2 = ({ door }) => {
@@ -21,17 +21,7 @@ export const DoorDetail2 = ({ door }) => {
   const [prefix, setPrefix] = useState(door.prefix);
   const [trailer, setTrailer] = useState(door.trailerNumber.toUpperCase());
   const [showToast, setShowToast] = useState(false);
-  // const [deleteToast, setDeleteToast] = useState(false);
-  // const [isLocked, setIsLocked] = useState(false);
   const [show, setShow] = useState(false);
-
-  // useEffect(() => {
-  //   setIsLocked(JSON.parse(window.localStorage.getItem("isLocked")));
-  // }, []);
-
-  // useEffect(() => {
-  //   window.localStorage.setItem("isLocked", isLocked);
-  // }, [isLocked]);
 
   const onUpdate = async () => {
     const ref = db.collection("doors").doc(door.id);
@@ -51,13 +41,12 @@ export const DoorDetail2 = ({ door }) => {
     setBreakout(breakout);
     setArrive(arrive);
     setNotes(notes);
-    if (empty) {
-      setStatus("Empty");
-    } else if (breakout) {
-      setStatus("Breakout");
-    } else if (arrive) {
-      setStatus("Arrive");
-    } else setStatus("");
+    setStatus(status);
+    setStatus(status);
+    console.log(empty);
+    console.log(breakout);
+    console.log(arrive);
+    console.log(status);
 
     setShowToast(true);
   };
@@ -73,27 +62,54 @@ export const DoorDetail2 = ({ door }) => {
       notes: "",
       status: "",
     });
-    setPrefix("-");
+    setPrefix("");
     setTrailer("");
     setEmpty(false);
     setBreakout(false);
     setArrive(false);
     setNotes("");
     setStatus("");
-
-    // setDeleteToast(true);
   };
 
-  const handleStatus = () => {
-    if (status == "Empty") {
-      return <div style={{ background: "red" }}>{status}</div>;
+  function computeEmpty(stat) {
+    const empty = "Empty";
+    if (stat === true) {
+      setStatus("");
+    } else {
+      setStatus(empty);
     }
-  };
+  }
+
+  function computeBreakout(stat) {
+    const breakout = "Breakout";
+    if (stat === true) {
+      setStatus("");
+    } else {
+      setStatus(breakout);
+    }
+  }
+
+  function computeArrive(stat) {
+    const arrive = "Arrive";
+    if (stat === true) {
+      setStatus("");
+    } else {
+      setStatus(arrive);
+    }
+  }
 
   //TODO: Make the output look pretty...This is more difficult than it seems. Don't judge me.
   return (
     <>
-      <Form>
+      <Form.Floating>
+        <Toast
+          onClose={() => setShowToast(false)}
+          show={showToast}
+          delay={3000}
+          autohide
+        >
+          <Toast.Header>Updated!</Toast.Header>
+        </Toast>
         <Row>
           <Col xs={2}>
             <div key={door.id}>
@@ -120,14 +136,14 @@ export const DoorDetail2 = ({ door }) => {
             </InputGroup>
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <div key={door.id} className="m-4">
+        <Row className="d-flex">
+          <Col sm="">
+            <div className="m-4">
               <p>{status}</p>
             </div>
           </Col>
-          <Col>
-            <InputGroup>
+          <Col className="">
+            <InputGroup className="justify-content-end">
               <Button
                 variant="success"
                 className="w-80 mt-4"
@@ -155,6 +171,7 @@ export const DoorDetail2 = ({ door }) => {
             <Form.Control
               type="text"
               id="trailer"
+              placeholder="Trailer"
               value={trailer}
               onChange={(e) => setTrailer(e.target.value)}
             />
@@ -182,7 +199,10 @@ export const DoorDetail2 = ({ door }) => {
                 className="m-2"
                 type="checkbox"
                 checked={empty}
-                onChange={(e) => setEmpty(!empty)}
+                onChange={(e) => {
+                  setEmpty(!empty);
+                  computeEmpty(empty);
+                }}
               />
               <Form.Label className="my-2 ms-4">Breakout</Form.Label>
               <Form.Check
@@ -191,7 +211,10 @@ export const DoorDetail2 = ({ door }) => {
                 className="m-2"
                 type="checkbox"
                 checked={breakout}
-                onChange={(e) => setBreakout(!breakout)}
+                onChange={(e) => {
+                  setBreakout(!breakout);
+                  computeBreakout(breakout);
+                }}
               />
               <Form.Label className="my-2 ms-4">Arrive</Form.Label>
               <Form.Check
@@ -200,7 +223,10 @@ export const DoorDetail2 = ({ door }) => {
                 className="m-2"
                 type="checkbox"
                 checked={arrive}
-                onChange={(e) => setArrive(!arrive)}
+                onChange={(e) => {
+                  setArrive(!arrive);
+                  computeArrive(arrive);
+                }}
               />
             </InputGroup>
             <InputGroup>
@@ -233,9 +259,17 @@ export const DoorDetail2 = ({ door }) => {
                 X
               </Button>
             </InputGroup>
+            <Toast
+              onClose={() => setShowToast(false)}
+              show={showToast}
+              delay={3000}
+              autohide
+            >
+              <Toast.Header>Updated!</Toast.Header>
+            </Toast>
           </Modal.Body>
         </Modal>
-      </Form>
+      </Form.Floating>
     </>
   );
 };
