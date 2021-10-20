@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import db from "./firebase.config";
+// import DoorStatus from "./DoorStatus";
 import {
   Button,
   Form,
@@ -23,6 +24,18 @@ export const DoorDetail2 = ({ door }) => {
   const [showToast, setShowToast] = useState(false);
   const [show, setShow] = useState(false);
 
+  const emptyStyle = {
+    backgroundColor: "green",
+    color: "white",
+    padding: "5px",
+  };
+
+  const arriveStyle = {
+    backgroundColor: "red",
+    color: "white",
+    padding: "5px",
+  };
+
   const onUpdate = async () => {
     const ref = db.collection("doors").doc(door.id);
     await ref.update({
@@ -43,10 +56,6 @@ export const DoorDetail2 = ({ door }) => {
     setNotes(notes);
     setStatus(status);
     setStatus(status);
-    console.log(empty);
-    console.log(breakout);
-    console.log(arrive);
-    console.log(status);
 
     setShowToast(true);
   };
@@ -98,6 +107,32 @@ export const DoorDetail2 = ({ door }) => {
     }
   }
 
+  function renderStatus(stat) {
+    switch (stat) {
+      case "Empty":
+        return (
+          <div
+            className="mt-4"
+            style={{ backgroundColor: "green", color: "white" }}
+          >
+            <p>{status}</p>
+          </div>
+        );
+      case "Arrive":
+        return (
+          <div style={{ backgroundColor: "red", color: "white" }}>
+            <p>{status}</p>
+          </div>
+        );
+      default:
+        return (
+          <div>
+            <p>{status}</p>
+          </div>
+        );
+    }
+  }
+
   //TODO: Make the output look pretty...This is more difficult than it seems. Don't judge me.
   return (
     <>
@@ -118,7 +153,6 @@ export const DoorDetail2 = ({ door }) => {
           </Col>
           <Col>
             <InputGroup>
-              {/* <Form.Label>Trailer</Form.Label> */}
               <Form.Control
                 type="text"
                 id="trailer"
@@ -137,11 +171,7 @@ export const DoorDetail2 = ({ door }) => {
           </Col>
         </Row>
         <Row className="d-flex">
-          <Col sm="">
-            <div className="m-4">
-              <p>{status}</p>
-            </div>
-          </Col>
+          <Col sm="">{renderStatus(status)}</Col>
           <Col className="">
             <InputGroup className="justify-content-end">
               <Button
