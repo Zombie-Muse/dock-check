@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import db from "./firebase.config";
-import { ListGroup, Spinner, Container, Alert } from "react-bootstrap";
+import {
+  ListGroup,
+  Spinner,
+  Container,
+  Alert,
+  Form,
+  Button,
+} from "react-bootstrap";
 import { DoorDetail2 } from "./DoorDetail2";
 import { useAuth } from "../context/AuthContext";
 
@@ -8,6 +15,7 @@ const DockLayout = () => {
   const [doors, setDoors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [search, setSearch] = useState();
   const { currentUser } = useAuth();
 
   const fetchDoors = async () => {
@@ -35,6 +43,15 @@ const DockLayout = () => {
     fetchDoors();
   }, []);
 
+  async function handleSearch(search) {
+    console.log(search);
+    const searchText = db
+      .collection("doors")
+      .where("trailerNumber", "===", search);
+    const res = await searchText.get();
+    console.log(res);
+  }
+
   if (loading) {
     return (
       <div className="text-center">
@@ -47,13 +64,35 @@ const DockLayout = () => {
 
   return (
     <div>
-      <Container>
+      <Container className="">
         <h1>LAX Dock Layout</h1>
         <p>
           <em>Signed in as: {currentUser.email}</em>
         </p>
         {error && <Alert variant="danger">{error}</Alert>}
       </Container>
+      <Form className="d-flex align-items-end flex-column mb-4">
+        <div className="d-flex align-items-end">
+          <Form.Control
+            className="d-flex"
+            type="search"
+            placeholder="Search"
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+          />
+          <Button
+            className=""
+            variant="info"
+            onClick={() => {
+              console.log(search);
+              handleSearch(search);
+            }}
+          >
+            Search
+          </Button>
+        </div>
+      </Form>
       <Container>
         <ListGroup>
           {doors.map((door) => (
