@@ -99,7 +99,7 @@ export const DoorDetail2 = ({ door }) => {
   }
 
   function computeArrive(stat) {
-    const arrive = "Arrive";
+    const arrive = "Arrive Trailer";
     if (stat === true) {
       setStatus("");
     } else {
@@ -213,7 +213,6 @@ export const DoorDetail2 = ({ door }) => {
                 onChange={(e) => setPrefix(e.target.value)}
               >
                 <option>{prefix}</option>
-                {/* <option value=""></option> */}
                 <option value="Pup">Pup</option>
                 <option value="Liftgate">Liftgate</option>
                 <option value="R+L Equip">R+L Equip</option>
