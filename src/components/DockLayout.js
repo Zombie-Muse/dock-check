@@ -71,7 +71,7 @@ const DockLayout = () => {
         </p>
         {error && <Alert variant="danger">{error}</Alert>}
       </Container>
-      <Form className="d-flex align-items-end flex-column mb-4">
+      {/* <Form className="d-flex align-items-end flex-column mb-4">
         <div className="d-flex align-items-end">
           <Form.Control
             className="d-flex"
@@ -92,7 +92,7 @@ const DockLayout = () => {
             Search
           </Button>
         </div>
-      </Form>
+      </Form> */}
       <Container>
         <ListGroup>
           {doors.map((door) => (
