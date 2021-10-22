@@ -118,7 +118,7 @@ export const DoorDetail2 = ({ door }) => {
             <p>{status}</p>
           </div>
         );
-      case "Arrive":
+      case "Arrive Trailer":
         return (
           <div style={{ backgroundColor: "red", color: "white" }}>
             <p>{status}</p>
