@@ -11,3 +11,4 @@ I built this based on the specific needs of the dock at which I work. The curren
 
 - _This version only has 10 doors to work with, but it should be enough to get the idea._
 - You need to make an account but it doesn't have to be a real email. Just wanted to show the authentication aspect of the app...or just sign in with "username@email.com" and "password" for the password.
+- This was initially designed for mobile since the user will be walking the dock while updating, so it might look better if you view it with that in mind.
