@@ -262,12 +262,13 @@ export const DoorDetail2 = ({ door }) => {
             <InputGroup>
               <FloatingLabel
                 controlId="floating-notes"
-                label={notes}
+                label="notes"
                 className="my-4 w-100"
               >
                 <Form.Control
                   type="textarea"
-                  placeholder="make notes here"
+                  // placeholder="make notes here"
+                  defaultValue={notes}
                   onChange={(e) => setNotes(e.target.value)}
                 />
               </FloatingLabel>
